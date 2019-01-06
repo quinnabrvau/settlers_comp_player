@@ -1,3 +1,7 @@
+# NOTE
+This is not a game designed to be played, It is solely designed to allow a user to test different AI players.
+
+
 ## TODO
 ### Next Steps
 #### Print game state

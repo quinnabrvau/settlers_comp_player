@@ -1,10 +1,15 @@
 
 #include "Game.hpp"
+#include "Board.hpp"
+#include "Player.hpp"
+#include "common.hpp"
 #include "unity.h"
 
 int main(int argc, const char * argv[]) {
-    Game game0;
-    Game game1(3,10);
-    game1.play_game();
-    return 0;
+    UNITY_BEGIN();
+
+    test__board_edge();
+    test__board_node();
+    
+    return UNITY_END();
 }

@@ -10,9 +10,6 @@ include_directories (
     ../include
     ../unity/src
 )
-add_definitions (
-    -DTESTING
-)
 add_executable (Test 
     ${TEST_C_SOURCES}
     ${TEST_CPP_SOURCES}

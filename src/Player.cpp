@@ -69,7 +69,7 @@ void Player::buy_city(b_node * node){
 }
 void Player::buy_road(b_edge * edge){
     if ( can_buy_road() &&
-         edge->available_road() ) {
+         edge->is_free() ) {
          resources[r_wood]--;  resources[r_brick]--;
          edge->assign_road(player);
     }

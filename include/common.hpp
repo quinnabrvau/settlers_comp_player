@@ -15,6 +15,14 @@
 #include <cassert>
 #include <algorithm>
 
+#ifdef TESTING
+    #define ASSERT(x)
+#else
+    #define ASSERT(x) assert(x)
+#endif
+
+const int MAX_PLAYERS = 6;
+
 #define DEFAULT_RESOURCES(x) x ## wood, x ## wheat, x ## brick, x ## ore, x ## sheep
 
 typedef enum {
@@ -52,8 +60,13 @@ private:
 public:
     void assign_road(int _player);
     bool is_player(int _player);
-    bool available_road(void);
+    bool is_free(void);
+    
+    void test__assign_road(void);
+    void test__is_player(void);
+    void test__is_free(void);
 };
+void test__board_edge(void);
 
 class b_node {
 private:
@@ -62,6 +75,7 @@ public:
     std::vector<std::pair< b_edge*,b_node* >> adjacent;
     std::vector<Tile*>   tiles;
     int * port = NULL;
+    //TODO Assign ports
     
     int get_object(void);
     int get_player(void);
@@ -73,15 +87,26 @@ public:
     int  has_port(void);
     
     std::vector<int> get_resources(void);
-    
     std::vector<int> get_resources(int roll);
-    
     std::vector<b_node*> get_available_settlements();
-
     std::vector<b_edge*> get_available_roads();
-    
     void print_node(void);
+    
+//test code
+    void test__get_object(void);
+    void test__get_player(void);
+    void test__can_build(void);
+    void test__can_upgrade(void);
+    void test__assign_settlement(void);
+    void test__upgrade_settlement(void);
+    void test__has_port(void);
+    void test__get_resources(void);
+    void test__get_available_settlements(void);
+    void test__get_available_roads(void);
 };
+
+void test__board_node(void);
+
 typedef std::pair< b_edge*,b_node* > b_adj;
 
 #endif /* common_h */
