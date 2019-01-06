@@ -14,7 +14,7 @@
 
 // BOARD EDGE
 void b_edge::assign_road(int _player) {
-    ASSERT(player==-1);
+    assert(player==-1);
     player=_player;
 };
 bool b_edge::is_player(int _player) { return player==_player; };
@@ -35,11 +35,11 @@ bool b_node::can_build(void) {
 bool b_node::can_upgrade(void) {return object==s_settlement;};
 
 void b_node::assign_settlement(int _player) {
-    ASSERT(player == -1); ASSERT(object==0);
+    assert(player == -1); assert(object==0);
     player=_player; object=s_settlement;
 };
 void b_node::upgrade_settlement(void) {
-    ASSERT(player != -1); ASSERT(object==1);
+    assert(player != -1); assert(object==1);
     object=s_city;
 };
 int  b_node::has_port(void) {if (port==NULL) return -1; return *port;};
@@ -75,17 +75,21 @@ std::vector<int> b_node::get_resources(int roll) {
 }
 
 std::vector<b_node*> b_node::get_available_settlements() {
-    ASSERT(object>0); ASSERT(player>=0);
-    std::list<b_node*> searched = {this};
+    assert(object>0); assert(player>=0);
+    std::vector<b_node*> searched = {this};
     std::set<b_node*> set = {this};
     std::vector<b_node*> out;
-    for (auto it = searched.cbegin(); it != searched.cend(); it++) {
-        if ( (*it)->can_build() ) {
-            out.push_back(*it);
+    for (int i = 0; i < searched.size(); i++) {
+        b_node* node = searched[i];
+        if ( node->can_build() ) {
+            // check that node is available and add it to output vector
+            out.push_back(node);
         }
-        for (auto ait = adjacent.cbegin(); ait != adjacent.cend(); ait++) {
+        for (auto ait = node->adjacent.begin(); ait != node->adjacent.end(); ait++) {
+            // check that the current road is the current players
             if ( (*ait).first->is_player(player) ) {
-                if (set.find((*ait).second) != set.end()) {
+                // check that we haven't visited that node yet
+                if (set.find((*ait).second) == set.end()) {
                     searched.push_back((*ait).second);
                     set.insert((*ait).second);
                 }
@@ -98,18 +102,25 @@ std::vector<b_node*> b_node::get_available_settlements() {
 // iteratively checks for all available roads attached
 // to a given node
 std::vector<b_edge*> b_node::get_available_roads() {
-    ASSERT(object>0); ASSERT(player>=0);
-    std::list<b_node*> searched = {this};
+    assert(object>0); assert(player>=0);
+    std::vector<b_node*> searched = {this};
     std::set<b_node*> set = {this};
     std::vector<b_edge*> out;
-    for (auto it = searched.cbegin(); it != searched.cend(); it++) {
-        for (auto ait = adjacent.cbegin(); ait != adjacent.cend(); ait++) {
+    for (int i = 0; i < searched.size(); i++) {
+        b_node* node = searched[i];
+        for (auto ait = node->adjacent.begin(); ait != node->adjacent.end(); ait++) {
+            // check that the current road is the current players
             if ( (*ait).first->is_player(player) ) {
-                if (set.find((*ait).second) != set.end()) {
-                    searched.push_back((*ait).second);
-                    set.insert((*ait).second);
+                // check that no other player owns the next node
+                // check that we haven't visited that node yet
+                if (((*ait).second->get_player() == get_player() ||
+                    (*ait).second->get_player() == -1 ) &&
+                    set.find((*ait).second) == set.end() ) {
+                        searched.push_back((*ait).second);
+                        set.insert((*ait).second);
                 }
             } else if ((*ait).first->is_free()) {
+                // check that the current road is free and add it to output vector
                 out.push_back((*ait).first);
             }
         }
@@ -221,12 +232,6 @@ void b_node_test__get_resources(void) {
     node.upgrade_settlement();
     node.test__get_resources(); // test with city
 }
-void b_node_test__get_available_settlements(void) {
-    
-}
-void b_node_test__get_available_roads(void) {
-    
-}
 
 void b_node::test__get_object(void) {
     for (object = 0; object < S_END; object++) {
@@ -290,11 +295,11 @@ void b_node::test__upgrade_settlement(void) {
 }
 
 void b_node::test__has_port(void) {
-    int Port = PORT_START;
+    int Port = P_START;
     port = NULL;
     TEST_ASSERT_EQUAL(-1, has_port());
     port = &Port;
-    for (Port = PORT_START; Port < P_END; Port++) {
+    for (Port = P_START; Port < P_END; Port++) {
         TEST_ASSERT_EQUAL(Port, has_port());
     }
 }
@@ -304,7 +309,7 @@ void b_node::test__get_resources(void){
     tiles.clear();
     res = get_resources();
     TEST_ASSERT_EQUAL(0, res.size());
-    i = 2, r = RES_START;
+    i = 2, r = R_START;
     for (auto it = a_tiles.begin(); it != a_tiles.end(); it++) {
         (*it)->roll = i++; (*it)->type = r++; (*it)->rob = false;
     }
@@ -354,11 +359,92 @@ void b_node::test__get_resources(void){
     res = get_resources(3);
     TEST_ASSERT_EQUAL(0, res.size());
 }
-void b_node::test__get_available_settlements(void){
-    // TODO
+void b_node_test__get_available_settlements(void) {
+    std::vector<b_edge> edges(4);
+    std::vector<b_node> nodes(edges.size()+1);
+    std::vector<b_node*> p_nodes;
+    
+    nodes[0].assign_settlement(0);
+    std::vector<b_node*> a_nodes;
+    a_nodes = nodes[0].get_available_settlements();
+    TEST_ASSERT_EQUAL(0, a_nodes.size());
+    for (int i = 0; i < edges.size(); i++) {
+        edges[i].assign_road(0);
+        nodes[i].adjacent.push_back(b_adj(&edges[i],&nodes[i+1]));
+        nodes[i+1].adjacent.push_back(b_adj(&edges[i],&nodes[i]));
+        a_nodes = nodes[0].get_available_settlements();
+        TEST_ASSERT_EQUAL(i, a_nodes.size());
+    }
+    for (int i = 0; i < nodes.size(); i++) {
+        p_nodes.push_back(&nodes[i]);
+    }
+    nodes[0].test__get_available_settlements(p_nodes);
 }
-void b_node::test__get_available_roads(void){
-    // TODO
+void b_node::test__get_available_settlements(std::vector<b_node*> nodes) {
+    std::vector<b_node*> a_nodes;
+    for (int i=0;i<MAX_PLAYERS;i++) {
+        nodes[2]->assign_settlement(i);
+        a_nodes = nodes[0]->get_available_settlements();
+        TEST_ASSERT_EQUAL(1, a_nodes.size());
+        nodes[2]->test__clear();
+        a_nodes = nodes[0]->get_available_settlements();
+        TEST_ASSERT_EQUAL(3, a_nodes.size());
+        
+        nodes[3]->assign_settlement(i);
+        a_nodes = nodes[0]->get_available_settlements();
+        TEST_ASSERT_EQUAL(0, a_nodes.size());
+        nodes[3]->test__clear();
+        a_nodes = nodes[0]->get_available_settlements();
+        TEST_ASSERT_EQUAL(3, a_nodes.size());
+    }
+    
+}
+void b_node_test__get_available_roads(void) {
+    std::vector<b_edge> edges(4);
+    std::vector<b_node> nodes(edges.size()+1);
+    std::vector<b_node*> p_nodes;
+    std::vector<b_edge*> p_edges;
+    
+    nodes[0].assign_settlement(0);
+    std::vector<b_edge*> a_edges;
+    a_edges = nodes[0].get_available_roads();
+    TEST_ASSERT_EQUAL(0, a_edges.size());
+    for (int i = 0; i < edges.size(); i++) {
+        p_edges.push_back(&edges[i]);
+        nodes[i].adjacent.push_back(b_adj(&edges[i],&nodes[i+1]));
+        nodes[i+1].adjacent.push_back(b_adj(&edges[i],&nodes[i]));
+        a_edges = nodes[0].get_available_roads();
+        TEST_ASSERT_EQUAL(1, a_edges.size());
+    }
+    for (int i = 0; i < nodes.size(); i++) {
+        p_nodes.push_back(&nodes[i]);
+    }
+    nodes[0].test__get_available_roads(p_nodes, p_edges);
+}
+void b_node::test__get_available_roads(std::vector<b_node*> nodes,
+                                       std::vector<b_edge*> edges){
+    std::vector<b_edge*> a_edges;
+    int p = 0, i;
+    
+    for (i=0; i<edges.size()-1;i++) {
+        edges[i]->assign_road(player);
+        a_edges = get_available_roads();
+        TEST_ASSERT_EQUAL(1, a_edges.size());
+        for (p=0;p<MAX_PLAYERS;p++) {
+            nodes[i+1]->assign_settlement(p);
+            a_edges = get_available_roads();
+            if (p==player) {
+                TEST_ASSERT_EQUAL(1, a_edges.size());
+            } else {
+                TEST_ASSERT_EQUAL(0, a_edges.size());
+            }
+            nodes[i+1]->test__clear();
+        }
+    }
+    //assign the last road to a different player
+    edges[i]->assign_road(player+1);
+    a_edges = get_available_roads();
+    TEST_ASSERT_EQUAL(0, a_edges.size());
 }
 
 void test__board_node(void) {

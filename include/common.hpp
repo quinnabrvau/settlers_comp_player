@@ -15,12 +15,6 @@
 #include <cassert>
 #include <algorithm>
 
-#ifdef TESTING
-    #define ASSERT(x)
-#else
-    #define ASSERT(x) assert(x)
-#endif
-
 const int MAX_PLAYERS = 6;
 
 #define DEFAULT_RESOURCES(x) x ## wood, x ## wheat, x ## brick, x ## ore, x ## sheep
@@ -29,19 +23,19 @@ typedef enum {
     DEFAULT_RESOURCES(r_),
     R_END,
 } tResources;
-#define RES_START FIRST_RESOURCE(r_)
+#define R_START FIRST_RESOURCE(r_)
 typedef enum {
     DEFAULT_RESOURCES(p_),
     p_any,
     P_END,
 } tPort;
-#define PORT_START FIRST_RESOURCE(p_)
+#define P_START FIRST_RESOURCE(p_)
 typedef enum {
     DEFAULT_RESOURCES(t_),
     t_desert,
     T_END,
 } tTile;
-#define TILE_START FIRST_RESOURCE(t_)
+#define T_START FIRST_RESOURCE(t_)
 typedef enum {
     s_none = 0,
     s_settlement,
@@ -65,6 +59,7 @@ public:
     void test__assign_road(void);
     void test__is_player(void);
     void test__is_free(void);
+    void test__clear(void) {player=-1;}
 };
 void test__board_edge(void);
 
@@ -101,8 +96,10 @@ public:
     void test__upgrade_settlement(void);
     void test__has_port(void);
     void test__get_resources(void);
-    void test__get_available_settlements(void);
-    void test__get_available_roads(void);
+    void test__get_available_settlements(std::vector<b_node*> nodes);
+    void test__get_available_roads(std::vector<b_node*> nodes,
+                                   std::vector<b_edge*> edges);
+    void test__clear(void) {player=-1;object=0;}
 };
 
 void test__board_node(void);

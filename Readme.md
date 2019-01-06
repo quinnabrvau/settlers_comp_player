@@ -4,8 +4,9 @@ This is not a game designed to be played, It is solely designed to allow a user 
 
 ## TODO
 ### Next Steps
-#### Print game state
-#### Test Code
+* Print game state
+* Test Code
+* Add CI testing 
 
 ### Basic Game
 * Add ports
@@ -19,5 +20,6 @@ This is not a game designed to be played, It is solely designed to allow a user 
 * MinMax player
   * Genetic Algorithm to learn how to weight values into state
 * RL based ML algorithm on moves
+
 
 
