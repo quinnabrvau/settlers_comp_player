@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 3.4)
 
 file(GLOB_RECURSE TEST_C_SOURCES   "*.c")
 file(GLOB_RECURSE TEST_CPP_SOURCES "*.cpp")
-file(GLOB_RECURSE UNITY_SOURCES "../src/*.c")
+file(GLOB_RECURSE UNITY_SOURCES "../unity/src/*")
 
 include_directories (
     ../include
