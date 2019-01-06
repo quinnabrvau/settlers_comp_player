@@ -36,11 +36,11 @@ bool b_node::can_upgrade(void) {return object==s_settlement;};
 
 void b_node::assign_settlement(int _player) {
     ASSERT(player == -1); ASSERT(object==0);
-    player=_player; object=1;
+    player=_player; object=s_settlement;
 };
 void b_node::upgrade_settlement(void) {
     ASSERT(player != -1); ASSERT(object==1);
-    object=2;
+    object=s_city;
 };
 int  b_node::has_port(void) {if (port==NULL) return -1; return *port;};
 
@@ -200,10 +200,32 @@ void b_node_test__can_upgrade(void) {
     b_node node;
     node.test__can_upgrade();
 }
-void test__board_node(void) {
-    RUN_TEST(b_node_test__get_object);
-    RUN_TEST(b_node_test__get_player);
-    RUN_TEST(b_node_test__can_build);
+void b_node_test__assign_settlement(void) {
+    b_node node;
+    node.test__assign_settlement();
+}
+void b_node_test__upgrade_settlement(void) {
+    b_node node;
+    node.test__upgrade_settlement();
+}
+void b_node_test__has_port(void) {
+    b_node node;
+    node.test__has_port();
+}
+void b_node_test__get_resources(void) {
+    b_node node;
+    Tile tiles[3];
+    for (int i = 0; i<3; i++) node.tiles.push_back(tiles+i);
+    node.assign_settlement(0);
+    node.test__get_resources(); // test with settlement
+    node.upgrade_settlement();
+    node.test__get_resources(); // test with city
+}
+void b_node_test__get_available_settlements(void) {
+    
+}
+void b_node_test__get_available_roads(void) {
+    
 }
 
 void b_node::test__get_object(void) {
@@ -240,5 +262,114 @@ void b_node::test__can_build(void) {
 }
 
 void b_node::test__can_upgrade(void) {
-    
+    object = s_none;
+    TEST_ASSERT_FALSE(can_upgrade());
+    object = s_settlement;
+    TEST_ASSERT_TRUE(can_upgrade());
+    object = s_city;
+    TEST_ASSERT_FALSE(can_upgrade());
+}
+
+void b_node::test__assign_settlement(void) {
+    TEST_ASSERT_EQUAL(s_none, object);
+    for (int p = 0; p < MAX_PLAYERS; p++) {
+        player = -1; object=s_none;
+        assign_settlement(p);
+        TEST_ASSERT_EQUAL(s_settlement, object);
+        TEST_ASSERT_EQUAL(p, player);
+    }
+}
+
+void b_node::test__upgrade_settlement(void) {
+    for (int p = 0; p < MAX_PLAYERS; p++) {
+        object = s_settlement; player = p;
+        upgrade_settlement();
+        TEST_ASSERT_EQUAL(s_city, object);
+        TEST_ASSERT_EQUAL(p, player);
+    }
+}
+
+void b_node::test__has_port(void) {
+    int Port = PORT_START;
+    port = NULL;
+    TEST_ASSERT_EQUAL(-1, has_port());
+    port = &Port;
+    for (Port = PORT_START; Port < P_END; Port++) {
+        TEST_ASSERT_EQUAL(Port, has_port());
+    }
+}
+void b_node::test__get_resources(void){
+    std::vector<int> res; int i, j, r;
+    std::vector<Tile*> a_tiles(tiles.begin(), tiles.end()); //all tiles for testing
+    tiles.clear();
+    res = get_resources();
+    TEST_ASSERT_EQUAL(0, res.size());
+    i = 2, r = RES_START;
+    for (auto it = a_tiles.begin(); it != a_tiles.end(); it++) {
+        (*it)->roll = i++; (*it)->type = r++; (*it)->rob = false;
+    }
+    for (auto it = a_tiles.begin(); it != a_tiles.end(); it++) {
+        tiles.clear();
+        TEST_ASSERT_EQUAL(0,tiles.size());
+        tiles.push_back(*it);
+        TEST_ASSERT_EQUAL(1,tiles.size());
+        res = get_resources();
+        TEST_ASSERT_EQUAL(object, res.size());
+        for (i = 0; i < object; i++) {
+            TEST_ASSERT_EQUAL((*it)->type, res[i]);
+        }
+        r = (*it)->roll-1;
+        res = get_resources(r);
+        TEST_ASSERT_EQUAL(0, res.size());
+        r = (*it)->roll;
+        res = get_resources(r);
+        TEST_ASSERT_EQUAL(object, res.size());
+        for (i = 0; i < object; i++) {
+            TEST_ASSERT_EQUAL((*it)->type, res[i]);
+        }
+        r = (*it)->roll+1;
+        res = get_resources(r);
+        TEST_ASSERT_EQUAL(0, res.size());
+    }
+    tiles.clear();
+    for (i=0;i<a_tiles.size();i++) {
+        tiles.push_back(a_tiles[i]);
+        TEST_ASSERT_EQUAL(i+1, tiles.size());
+        res = get_resources();
+        TEST_ASSERT_EQUAL(object*(i+1), res.size());
+        r = a_tiles[i]->roll;
+        res = get_resources(r);
+        TEST_ASSERT_EQUAL(object, res.size());
+        for (j = 0; j < object; j++) {
+            TEST_ASSERT_EQUAL(a_tiles[i]->type, res[j]);
+        }
+    }
+    for (auto it = a_tiles.begin(); it != a_tiles.end(); it++) {
+        (*it)->roll = 2;
+    }
+    res = get_resources(1);
+    TEST_ASSERT_EQUAL(0, res.size());
+    res = get_resources(2);
+    TEST_ASSERT_EQUAL(object*a_tiles.size(), res.size());
+    res = get_resources(3);
+    TEST_ASSERT_EQUAL(0, res.size());
+}
+void b_node::test__get_available_settlements(void){
+    // TODO
+}
+void b_node::test__get_available_roads(void){
+    // TODO
+}
+
+void test__board_node(void) {
+    RUN_TEST(b_node_test__get_object);
+    RUN_TEST(b_node_test__get_player);
+    RUN_TEST(b_node_test__can_build);
+    RUN_TEST(b_node_test__can_upgrade);
+    RUN_TEST(b_node_test__assign_settlement);
+    RUN_TEST(b_node_test__upgrade_settlement);
+    RUN_TEST(b_node_test__has_port);
+    RUN_TEST(b_node_test__get_resources);
+    RUN_TEST(b_node_test__get_available_settlements);
+    RUN_TEST(b_node_test__get_available_roads);
 }

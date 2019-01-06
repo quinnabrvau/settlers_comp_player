@@ -24,24 +24,24 @@
 const int MAX_PLAYERS = 6;
 
 #define DEFAULT_RESOURCES(x) x ## wood, x ## wheat, x ## brick, x ## ore, x ## sheep
-
+#define FIRST_RESOURCE(x) x ## wood
 typedef enum {
     DEFAULT_RESOURCES(r_),
     R_END,
 } tResources;
-
+#define RES_START FIRST_RESOURCE(r_)
 typedef enum {
     DEFAULT_RESOURCES(p_),
     p_any,
     P_END,
 } tPort;
-
+#define PORT_START FIRST_RESOURCE(p_)
 typedef enum {
     DEFAULT_RESOURCES(t_),
     t_desert,
     T_END,
 } tTile;
-
+#define TILE_START FIRST_RESOURCE(t_)
 typedef enum {
     s_none = 0,
     s_settlement,
