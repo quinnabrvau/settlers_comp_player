@@ -12,18 +12,6 @@
 
 #include <iostream>
 
-void b_node::print_node(void) {
-    std::cout << "\tplayer: " << player << "\tobject: " << object << "\n";
-    std::cout << "\tconected edge->node(" <<adjacent.size() << "): " ;
-    for (auto it = adjacent.cbegin(); it != adjacent.cend(); it++) {
-        b_adj adj = *it;
-        std::cout << adj.first << "->" << adj.second << "\t";
-    } std::cout << "\n";
-    std::cout << "\tconected tiles(" <<tiles.size() << "): ";
-    for (auto it = tiles.cbegin(); it != tiles.cend(); it++) {
-        std::cout << (*it)->type << " " << (*it)->roll << "\t";
-    } std::cout << "\n";
-}
 
 std::vector<int> rolls_4_player() {
     std::vector<int> rolls;

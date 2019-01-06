@@ -7,9 +7,8 @@ file(GLOB_RECURSE TEST_CPP_SOURCES "*.cpp")
 file(GLOB_RECURSE UNITY_SOURCES "../src/*.c")
 
 include_directories (
-    ${TEST_SOURCE_DIR}/src
-    ${TEST_SOURCE_DIR}/include
-    ${TEST_SOURCE_DIR}/unity
+    ../include
+    ../unity/src
 )
 add_definitions (
     -DTESTING

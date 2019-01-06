@@ -5,6 +5,12 @@ set( GAME_SOURCES
     ./Board.cpp
     ./Game.cpp
     ./Player.cpp
+    ./common.cpp
+)
+
+include_directories(
+    ../include
+    ../unity/src
 )
 
 add_library(GAME_LIB
