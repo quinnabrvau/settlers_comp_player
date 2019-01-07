@@ -119,7 +119,7 @@ void Game::main_turn(Player * player) {
 }
 
 void Game::rob_players(void) {
-    
+    //TODO
 }
 
 

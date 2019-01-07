@@ -8,10 +8,19 @@
 
 #include "Player.hpp"
 #include <set>
+#include <string>
+#include <vector>
 #include <iostream>
+
 
 void print_move(Move move) {
     std::cout << "\tMove: " << move.first << " @ " << move.second << "\n";
+}
+void print_moves(std::vector<Move> moves) {
+    for (auto it = moves.begin(); it != moves.end(); it++) {
+        std::cout << "\t";
+        print_move(*it);
+    }
 }
 
 int Player::points_pub() {
@@ -181,6 +190,7 @@ Move Player::move(std::vector<Move> moves) {
         return Move(m_no_moves,NULL);
     }
     int m = rand()%moves.size();
+    print_moves(moves);
     print_move(moves[m]);
     return moves[m];
 }

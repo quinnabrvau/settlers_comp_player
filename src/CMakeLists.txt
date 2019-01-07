@@ -8,6 +8,7 @@ set( GAME_SOURCES
     ./Game.cpp
     ./Player.cpp
     ./common.cpp
+    ../unity/src/unity.c
     ${headers}
 )
 
@@ -20,6 +21,8 @@ add_library(GAME_LIB
     ${GAME_SOURCES}
 )
 add_executable(catan
-    ${GAME_SOURCES}
     ./main.cpp
+)
+target_link_libraries(catan
+    GAME_LIB
 )
