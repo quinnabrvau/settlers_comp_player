@@ -19,4 +19,4 @@ target_link_libraries(Test
     GAME_TEST_LIB
 )
 
-add_test (NAME MyTest COMMAND Test)
+add_test (NAME Unit_Test COMMAND Test)

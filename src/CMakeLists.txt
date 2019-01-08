@@ -15,10 +15,6 @@ include_directories(
     ../include
 )
 
-add_library(GAME_LIB
-    ${GAME_SOURCES}
-)
-
 add_library(GAME_TEST_LIB
     ../unity/src/unity.c
     ${GAME_SOURCES}
@@ -31,8 +27,9 @@ target_compile_definitions(GAME_TEST_LIB
 )
 
 add_executable(catan
+    ${GAME_SOURCES}
     ./main.cpp
 )
-target_link_libraries(catan
-    GAME_LIB
-)
+
+
+add_test (NAME Play_Test COMMAND catan -t)
