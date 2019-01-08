@@ -43,7 +43,7 @@ public:
     int roll_dice(void);
     void distribute_resources(int roll);
     
-    void play_game(void);
+    int play_game(void);
 };
 
 #endif /* Game_hpp */

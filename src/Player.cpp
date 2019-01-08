@@ -205,3 +205,29 @@ Move Player::move(void) {
     std::vector<Move> moves = get_moves();
     return move(moves);
 }
+
+#ifdef TESTING
+#include "unity.h"
+
+void test__get_moves(void) {
+    Player P(0);
+    b_node nodes[3];
+    b_edge edges[2];
+}
+void Player::test_get_moves(void) {
+    
+}
+
+void test__move(void) {
+    
+}
+void Player::test_move(void) {
+    
+}
+
+void test__player(void) {
+    RUN_TEST(test__get_moves);
+    RUN_TEST(test__move);
+}
+
+#endif

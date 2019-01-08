@@ -32,4 +32,4 @@ add_executable(catan
 )
 
 
-add_test (NAME Play_Test COMMAND catan -t)
+## add_test (NAME Play_Test COMMAND catan -t)

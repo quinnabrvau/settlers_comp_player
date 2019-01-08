@@ -186,7 +186,7 @@ int Game::is_winner() {
     return -1;
 }
 
-void Game::play_game(void) {
+int Game::play_game(void) {
     int winner = -1;
     int p = 0; //p for player
     int turns = 0;
@@ -199,4 +199,5 @@ void Game::play_game(void) {
         p = (p+1)%players.size();
         turns++;
     }
+    return winner;
 }

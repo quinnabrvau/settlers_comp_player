@@ -85,8 +85,7 @@ public:
     bool can_buy_city(void);
     bool can_buy_road(void);
     
-    //get regular game moves
-    std::vector<Move> get_moves(void);
+    
     
     //rober steals card
     int steal(void);
@@ -97,12 +96,21 @@ public:
     // allows for the giving of resources, like a trade or steal
     void add_resource(int);
     
+    //get regular game moves
+    std::vector<Move> get_moves(void);
+    
     // take a turn
     // given a set of moves (think start the game)
     Move move(std::vector<Move> moves);
     // a normal turn
     Move move(void);
+    
+    //TESTS
+    //Move_tests
+    void test_get_moves(void);
+    void test_move(void);
 };
 
+void test__player(void);
 
 #endif /* Player_hpp */

@@ -11,5 +11,7 @@ int main(int argc, const char * argv[]) {
     test__board_edge();
     test__board_node();
     
+    test__player();
+    
     return UNITY_END();
 }
