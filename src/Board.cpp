@@ -7,7 +7,7 @@
 //
 
 #include "Board.hpp"
-#include <cstdlib>
+#include <random>
 #include <algorithm>
 
 #include <iostream>
@@ -72,8 +72,8 @@ void Board::gen_sets(void) {
     }
     assert(rolls.size()==types.size()-1);
     
-    std::random_shuffle(types.begin(), types.end());
-    std::random_shuffle(rolls.begin(), rolls.end());
+    std::shuffle(types.begin(), types.end(), std::default_random_engine());
+    std::shuffle(rolls.begin(), rolls.end(), std::default_random_engine());
     
     k = 0;
     for (i = 0; i<n_corners;k++) {

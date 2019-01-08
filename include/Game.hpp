@@ -8,9 +8,10 @@
 
 #ifndef Game_hpp
 #define Game_hpp
-#include "common.hpp"
-#include "Board.hpp"
 #include "Player.hpp"
+#include "Board.hpp"
+#include "common.hpp"
+
 
 typedef enum {
     ROLL_DICE,

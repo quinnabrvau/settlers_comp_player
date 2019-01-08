@@ -7,9 +7,9 @@
 //
 
 #include "Game.hpp"
-#include <cstdlib>
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
 std::vector<int> all_rolls() {
     int i, j;
@@ -26,7 +26,7 @@ Game::Game(int _players,int seed, tRollType roll) : roll_type(roll) {
     for (int i = 0; i<_players; i++) {
         players.push_back(Player(i));
     }
-    std::random_shuffle(players.begin(), players.end());
+    std::shuffle(players.begin(), players.end(), std::default_random_engine());
     board = Board(_players, seed);
 }
 
@@ -165,7 +165,7 @@ int Game::roll_dice(void) {
     } else {
         if (stack.size()==0) { //create a new stack and shuffle the stack
             stack = all_rolls();
-            std::random_shuffle(stack.begin(), stack.end());
+            std::shuffle(stack.begin(), stack.end(), std::default_random_engine());
         }
         if (roll_type == ROLL_STACK_5) { //remove the top five cards
             for (int i=0;i<5;i++) stack.pop_back();

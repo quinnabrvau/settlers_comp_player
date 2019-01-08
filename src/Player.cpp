@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <random>
 
 
 void print_move(Move move) {
@@ -67,12 +68,13 @@ void Player::buy_settlement(b_node * node){
          node->can_build() ) {
         resources[r_wood]--; resources[r_sheep]--; resources[r_brick]--; resources[r_wheat]--;
         node->assign_settlement(player);
+        nodes.push_back(node);
     }
 }
 void Player::buy_city(b_node * node){
     if ( can_buy_city()  &&
         node->can_upgrade() ) {
-         resources[r_wheat]-=2; resources[r_ore]-=3;
+        resources[r_wheat]-=2; resources[r_ore]-=3;
         node->upgrade_settlement();
     }
 }
@@ -136,15 +138,15 @@ std::vector<Move> Player::get_moves(void) {
         }
     }
     if (can_buy_road()) {
-        std::vector<b_node*> roads = get_available_settlements();
+        std::vector<b_edge*> roads = get_available_roads();
         for (auto it = roads.cbegin(); it != roads.cend(); it++) {
-            moves.push_back(Move(m_buy_city,*it));
+            moves.push_back(Move(m_buy_road,*it));
         }
     }
     if (can_buy_settlement()) {
         std::vector<b_node*> setl = get_available_settlements();
         for (auto it = setl.cbegin(); it != setl.cend(); it++) {
-            moves.push_back(Move(m_buy_city,*it));
+            moves.push_back(Move(m_buy_settlement,*it));
         }
     }
     return moves;
@@ -189,9 +191,14 @@ Move Player::move(std::vector<Move> moves) {
     if (moves.size() == 0) {
         return Move(m_no_moves,NULL);
     }
-    int m = rand()%moves.size();
-    print_moves(moves);
-    print_move(moves[m]);
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> uniform_dist(0, 200000);
+    int m = uniform_dist( generator ) % moves.size();
+    if (m!=0) {
+        std::cout << "moves: " << m << "\n";
+        print_moves(moves);
+        print_move(moves[m]);
+    }
     return moves[m];
 }
 Move Player::move(void) {

@@ -9,7 +9,9 @@
 #ifndef Player_hpp
 #define Player_hpp
 
-#include <utility>
+#include <vector>
+#include <algorithm>
+#include <random>
 #include "common.hpp"
 
 typedef enum {
@@ -48,6 +50,7 @@ class Player {
     std::vector<b_node*> nodes; //heads of the two colonies
     //TODO add developement cards
     int player;
+    
 public:
     Player(int p) : player(p) {};
     
