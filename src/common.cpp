@@ -8,7 +8,6 @@
 
 
 #include "common.hpp"
-#include "unity.h"
 #include <iostream>
 
 
@@ -144,6 +143,9 @@ void b_node::print_node(void) {
 
 // TEST CODE
 // BOARD EDGE
+
+#ifdef TESTING
+#include "unity.h"
 
 void b_edge_test_assign_road(void) {
     b_edge edge;
@@ -459,3 +461,4 @@ void test__board_node(void) {
     RUN_TEST(b_node_test__get_available_settlements);
     RUN_TEST(b_node_test__get_available_roads);
 }
+#endif//TESTING

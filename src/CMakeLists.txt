@@ -8,18 +8,28 @@ set( GAME_SOURCES
     ./Game.cpp
     ./Player.cpp
     ./common.cpp
-    ../unity/src/unity.c
     ${headers}
 )
 
 include_directories(
     ../include
-    ../unity/src
 )
 
 add_library(GAME_LIB
     ${GAME_SOURCES}
 )
+
+add_library(GAME_TEST_LIB
+    ../unity/src/unity.c
+    ${GAME_SOURCES}
+)
+target_include_directories(GAME_TEST_LIB
+    PRIVATE ../unity/src
+)
+target_compile_definitions(GAME_TEST_LIB
+    PRIVATE TESTING
+)
+
 add_executable(catan
     ./main.cpp
 )

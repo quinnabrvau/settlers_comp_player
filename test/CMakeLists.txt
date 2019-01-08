@@ -16,7 +16,7 @@ add_executable (Test
     ${UNITY_SOURCES}
 )
 target_link_libraries(Test
-    GAME_LIB
+    GAME_TEST_LIB
 )
 
 add_test (NAME MyTest COMMAND Test)
