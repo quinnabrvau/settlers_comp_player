@@ -182,7 +182,7 @@ int  Player::cnt_resources(void) {
 }
 
 void Player::add_resource(int res) {
-    assert(res>=0 && res<R_END);
+    ASSERT(res>=0 && res<R_END);
     resources[res]++;
 }
 
@@ -191,14 +191,7 @@ Move Player::move(std::vector<Move> moves) {
     if (moves.size() == 0) {
         return Move(m_no_moves,NULL);
     }
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> uniform_dist(0, 200000);
     int m = uniform_dist( generator ) % moves.size();
-    if (m!=0) {
-        std::cout << "moves: " << m << "\n";
-        print_moves(moves);
-        print_move(moves[m]);
-    }
     return moves[m];
 }
 Move Player::move(void) {
@@ -219,7 +212,25 @@ void Player::test_get_moves(void) {
 }
 
 void test__move(void) {
-    
+    Player P(0);
+    std::vector<Move> moves = {
+        Move(m_turn_moves_s,NULL), 
+        Move(m_buy_settlement,NULL),
+        Move(m_buy_city,NULL),  };
+    std::vector<int> res = {0,0,0};
+    for (int i = 0; i < 50000; i++) {
+        Move move = P.move(moves);
+        res[move.first]++;
+    }
+    for (int i = 0; i < res.size(); i++) {
+        for (int j = 0; j < i; j++) {
+            TEST_ASSERT(res[i]*2>res[j] && res[j]*2>res[i]);
+        }
+    }
+    moves.clear();
+    Move move = P.move(moves);
+    TEST_ASSERT_EQUAL(m_no_moves, move.first);
+    TEST_ASSERT_EQUAL(NULL, move.second);
 }
 void Player::test_move(void) {
     

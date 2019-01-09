@@ -44,15 +44,21 @@ typedef enum {
 } tMoves;
 
 typedef std::pair<tMoves,void *> Move;
+void print_move(Move move);
+void print_moves(std::vector<Move> moves);
 
 class Player {
     unsigned int resources[R_END];
     std::vector<b_node*> nodes; //heads of the two colonies
     //TODO add developement cards
     int player;
-    
+
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> uniform_dist;
 public:
-    Player(int p) : player(p) {};
+    Player(int p) : player(p) {
+        uniform_dist = std::uniform_int_distribution<int>(0, 200000);
+    };
     
     int get_player(void) {return player;}
     // gets the points the oponents can see

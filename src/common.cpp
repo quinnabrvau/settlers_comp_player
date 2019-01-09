@@ -13,7 +13,7 @@
 
 // BOARD EDGE
 void b_edge::assign_road(int _player) {
-    assert(player==-1);
+    ASSERT(player==-1);
     player=_player;
 };
 bool b_edge::is_player(int _player) { return player==_player; };
@@ -34,11 +34,11 @@ bool b_node::can_build(void) {
 bool b_node::can_upgrade(void) {return object==s_settlement;};
 
 void b_node::assign_settlement(int _player) {
-    assert(player == -1); assert(object==0);
+    ASSERT(player == -1); ASSERT(object==0);
     player=_player; object=s_settlement;
 };
 void b_node::upgrade_settlement(void) {
-    assert(player != -1); assert(object==1);
+    ASSERT(player != -1); ASSERT(object==1);
     object=s_city;
 };
 int  b_node::has_port(void) {if (port==NULL) return -1; return *port;};
@@ -74,7 +74,7 @@ std::vector<int> b_node::get_resources(int roll) {
 }
 
 std::vector<b_node*> b_node::get_available_settlements() {
-    assert(object>0); assert(player>=0);
+    ASSERT(object>0); ASSERT(player>=0);
     std::vector<b_node*> searched = {this};
     std::set<b_node*> set = {this};
     std::vector<b_node*> out;
@@ -101,7 +101,7 @@ std::vector<b_node*> b_node::get_available_settlements() {
 // iteratively checks for all available roads attached
 // to a given node
 std::vector<b_edge*> b_node::get_available_roads() {
-    assert(object>0); assert(player>=0);
+    ASSERT(object>0); ASSERT(player>=0);
     std::vector<b_node*> searched = {this};
     std::set<b_node*> set = {this};
     std::vector<b_edge*> out;

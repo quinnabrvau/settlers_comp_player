@@ -27,10 +27,14 @@ int main(int argc, const char * argv[]) {
     CmdLineParser cmd = CmdLineParser(argc, argv);
     if (cmd["-t"]) {
         Game game0;
-        int w = game0.play_game();
-        Game game1(3,10);
-        w = game1.play_game();
-        return w; // should be 0
+        game0.play_game();
+        Game game1(3,ROLL_DICE);
+        game1.play_game();
+        Game game2(3,ROLL_STACK);
+        game2.play_game();
+        Game game3(3,ROLL_STACK_5);
+        game3.play_game();
+        return 0;
     }
     return 0;
 }

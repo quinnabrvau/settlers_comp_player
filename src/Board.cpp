@@ -50,12 +50,6 @@ std::vector<int> node_shape_4_player() {
     return out;
 }
 
-void Board::gen_sets(int seed) {
-    if (seed != -1)
-        srand(seed);
-    this->gen_sets();
-}
-
 void Board::gen_sets(void) {
     int i, j, k;
     std::vector<int> node_shape;
@@ -68,12 +62,12 @@ void Board::gen_sets(void) {
         rolls = rolls_4_player();
         types = board_4_player();
     } else {
-        assert(false);
+        ASSERT(false);
     }
-    assert(rolls.size()==types.size()-1);
+    ASSERT(rolls.size()==types.size()-1);
     
-    std::shuffle(types.begin(), types.end(), std::default_random_engine());
-    std::shuffle(rolls.begin(), rolls.end(), std::default_random_engine());
+    std::shuffle(types.begin(), types.end(), generator);
+    std::shuffle(rolls.begin(), rolls.end(), generator);
     
     k = 0;
     for (i = 0; i<n_corners;k++) {
@@ -94,7 +88,7 @@ void Board::gen_sets(void) {
     auto rit = rolls.cbegin();
     k = 0;
     while (rit != rolls.cend() && tit != types.cend()) {
-        assert(k<tile_shape.size());
+        ASSERT(k<tile_shape.size());
         std::vector<Tile> new_tiles;
         for (j=0;j<tile_shape[k];j++) {
             if (*tit != t_desert) {

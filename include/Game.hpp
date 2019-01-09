@@ -26,8 +26,9 @@ class Game {
     std::vector<int> stack; // used for drawing from a stack of cards
     int max_actions = 100;
     int win_points = 10;
+    
 public:
-    Game(int _players = 4,int seed = -1, tRollType roll = ROLL_DICE) ;
+    Game(int _players = 4, tRollType roll = ROLL_DICE) ;
     
     void start_phase(void);
     void start_turn(Player * player, bool get_resource=false);

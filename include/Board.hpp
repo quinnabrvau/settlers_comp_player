@@ -11,6 +11,7 @@
 
 #include <utility>
 #include <vector>
+#include <random>
 #include <cassert>
 
 #include "common.hpp"
@@ -23,12 +24,19 @@ private:
     int n_corners = 2*(6+6+1)+(6*3+4);
     int n_edges   = 2*(6*2+4)+(6*3+8)+2*7;
     int players = 4;
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> uniform_dist;
     void build_board(void);
     void gen_sets(void);
-    void gen_sets(int);
 public:
     void clear(void);
-    Board(int _players=4, int seed=-1) : players(_players) {assert(_players>0);clear();gen_sets(seed);build_board();};
+
+    Board(int _players=4) : players(_players) {
+        ASSERT(_players>0);
+        clear();
+        gen_sets();
+        build_board();
+    }
     
     
     

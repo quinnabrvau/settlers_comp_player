@@ -22,12 +22,12 @@ std::vector<int> all_rolls() {
     return rolls;
 }
 
-Game::Game(int _players,int seed, tRollType roll) : roll_type(roll) {
+Game::Game(int _players, tRollType roll) : roll_type(roll) {
     for (int i = 0; i<_players; i++) {
         players.push_back(Player(i));
     }
     std::shuffle(players.begin(), players.end(), std::default_random_engine());
-    board = Board(_players, seed);
+    board = Board(_players);
 }
 
 void Game::start_phase(void) {
@@ -54,7 +54,7 @@ void Game::start_turn(Player * player, bool get_resource) {
     }
     Move move = player->move(moves);
     //check move in bounds
-    assert(move.first>m_start_moves_s && move.first<m_start_moves_e);
+    ASSERT(move.first>m_start_moves_s && move.first<m_start_moves_e);
     // get the location where the settlement is tobe was placed
     b_node* node = (b_node*) move.second;
     // place settlement
@@ -68,7 +68,7 @@ void Game::start_turn(Player * player, bool get_resource) {
     }
     move = player->move(moves);
     //check move in bounds
-    assert(move.first>m_start_moves_s && move.first<m_start_moves_e);
+    ASSERT(move.first>m_start_moves_s && move.first<m_start_moves_e);
     // get the location where the settlement is tobe was placed
     b_edge* edge = (b_edge*) move.second;
     // place road
@@ -76,7 +76,7 @@ void Game::start_turn(Player * player, bool get_resource) {
 }
 
 void Game::run_turn_move(Player * player, Move move) {
-    assert(move.first > m_turn_moves_s &&
+    ASSERT(move.first > m_turn_moves_s &&
            move.first < m_turn_moves_e);
     if (move.first == m_end_turn) return;
     switch (move.first) {
@@ -93,7 +93,7 @@ void Game::run_turn_move(Player * player, Move move) {
             break;
             
         default:
-            assert(false);
+            ASSERT(false);
             break;
     }
 }
@@ -137,7 +137,7 @@ void Game::move_rober(Player *player){
     }
     Move move = player->move(moves);
     // check that move is valid
-    assert(move.first == m_move_rober);
+    ASSERT(move.first == m_move_rober);
     
     // steal a card
     moves.clear();

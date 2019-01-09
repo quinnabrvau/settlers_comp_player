@@ -15,6 +15,13 @@
 #include <cassert>
 #include <algorithm>
 
+#ifdef TESTING
+    #include "unity.h"
+    #define ASSERT(...) TEST_ASSERT(__VA_ARGS__)
+#else
+    #define ASSERT(...) assert(__VA_ARGS__)
+#endif
+
 const int MAX_PLAYERS = 6;
 
 #define DEFAULT_RESOURCES(x) x ## wood, x ## wheat, x ## brick, x ## ore, x ## sheep
