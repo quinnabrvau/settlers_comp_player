@@ -85,6 +85,5 @@ popd
 
 unset CC
 unset CXX
-return -11
 exit 0
 
