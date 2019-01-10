@@ -5,11 +5,10 @@ steps:
   args: [ 'build', '--tag=gcr.io/$PROJECT_ID/build-image', '.' ]
   timeout: 500s
 -name: 'gcr.io/$PROJECT_ID/build-image'
-  args: ['git', 'clone', 'https://github.com/quinnabrvau/settlers_comp_player.git','project']
+  args: ['git', 'clone', 'https://github.com/quinnabrvau/settlers_comp_player.git']
   timeout: 500s
 -name: 'gcr.io/$PROJECT_ID/build-image'
   args: ['make', 'test']
-  dir: 'project'
   timeout: 500s
 images:
 - 'gcr.io/$PROJECT_ID/build-image'
