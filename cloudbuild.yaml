@@ -6,6 +6,9 @@ steps:
   args: ['clone', 'https://github.com/quinnabrvau/settlers_comp_player.git']
   timeout: 500s
 - name: 'ubuntu'
+  args: ['ls']
+  timeout: 500s
+- name: 'ubuntu'
   args: ['sh','./all_test.sh']
   timeout: 500s
 images:
