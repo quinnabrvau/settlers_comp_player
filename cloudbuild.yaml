@@ -1,6 +1,12 @@
 steps:
 - name: 'gcr.io/cloud-builders/git'
-  args: ['clone', '--recurse-submodules','https://github.com/quinnabrvau/settlers_comp_player.git']
+  args: ['clone', 'https://github.com/quinnabrvau/settlers_comp_player.git']
+- name: 'gcr.io/$PROJECT_ID/build-image'
+  args: ['ls']
+- name: 'gcr.io/$PROJECT_ID/build-image'
+  args: ['ls','unity']
+# - name: 'gcr.io/$PROJECT_ID/build-image'
+#   args: ['git','clone','https://github.com/ThrowTheSwitch/Unity.git','unity']
 - name: 'gcr.io/$PROJECT_ID/build-image'
   args: ['cmake','.']
   env: 
