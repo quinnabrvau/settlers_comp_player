@@ -10,7 +10,7 @@
 #define Game_hpp
 #include "Player.hpp"
 #include "Board.hpp"
-#include "common.hpp"
+#include "b_common.hpp"
 
 
 typedef enum {

@@ -14,7 +14,7 @@
 #include <random>
 #include <cassert>
 
-#include "common.hpp"
+#include "b_common.hpp"
 
 class Board {
 private:

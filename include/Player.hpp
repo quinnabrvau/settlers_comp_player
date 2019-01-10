@@ -12,7 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
-#include "common.hpp"
+#include "b_common.hpp"
 
 typedef enum {
     // error moves:

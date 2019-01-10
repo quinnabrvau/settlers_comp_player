@@ -7,11 +7,18 @@ set( GAME_SOURCES
     ./Board.cpp
     ./Game.cpp
     ./Player.cpp
-    ./common.cpp
-    ${headers}
+    ./b_common.cpp
+    ../include/Board.hpp
+    ../include/Game.hpp
+    ../include/Player.hpp
+    ../include/b_common.hpp
+    ../include/common.hpp
 )
 set( GENETIC_SOURCES
     ./Genetic.cpp
+    ../include/Genetic.hpp
+    ../include/Array.hpp
+    ../include/common.hpp
 )
 
 include_directories(
