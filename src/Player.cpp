@@ -194,7 +194,7 @@ Move Player::move(std::vector<Move> moves) {
     if (moves.size() == 0) {
         return Move(m_no_moves,NULL);
     }
-    int m = uniform_dist( generator ) % moves.size();
+    int m =  uniform_dist( generator ) % moves.size();
     return moves[m];
 }
 Move Player::move(void) {

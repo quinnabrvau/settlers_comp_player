@@ -24,8 +24,6 @@ private:
     int n_corners = 2*(6+6+1)+(6*3+4);
     int n_edges   = 2*(6*2+4)+(6*3+8)+2*7;
     int players = 4;
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> uniform_dist;
     void build_board(void);
     void gen_sets(void);
 public:

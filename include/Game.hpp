@@ -22,13 +22,14 @@ typedef enum {
 class Game {
     tRollType roll_type = ROLL_DICE;
     Board board;
-    std::vector<Player> players;
+    std::vector<Player> _players;
+    std::vector<Player*> players;
     std::vector<int> stack; // used for drawing from a stack of cards
     int max_actions = 100;
     int win_points = 10;
-    
 public:
-    Game(int _players = 4, tRollType roll = ROLL_DICE) ;
+    Game(int c_players = 4, tRollType roll = ROLL_DICE);
+    Game(std::vector<Player*> __players, tRollType roll = ROLL_DICE);
     
     void start_phase(void);
     void start_turn(Player * player, bool get_resource=false);

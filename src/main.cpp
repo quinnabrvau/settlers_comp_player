@@ -34,6 +34,16 @@ int main(int argc, const char * argv[]) {
         game2.play_game();
         Game game3(3,ROLL_STACK_5);
         game3.play_game();
+        std::vector<Player> _players;
+        std::vector<Player*> players;
+        for (int i = 1; i<=4; i++) {
+            _players.push_back(Player(i));
+        }
+        for (int i = 0; i<4; i++) {
+            players.push_back(&_players[i]);
+        }
+        Game game4(players);
+        game4.play_game();
         return 0;
     }
     return 0;

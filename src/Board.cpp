@@ -66,8 +66,8 @@ void Board::gen_sets(void) {
     }
     ASSERT(rolls.size()==types.size()-1);
     
-    std::shuffle(types.begin(), types.end(), generator);
-    std::shuffle(rolls.begin(), rolls.end(), generator);
+    std::random_shuffle(types.begin(), types.end());
+    std::random_shuffle(rolls.begin(), rolls.end());
     
     k = 0;
     for (i = 0; i<n_corners;k++) {
@@ -221,7 +221,8 @@ std::vector<int> Board::get_players_on_tile(Tile * tile) {
     std::set<int> set;
     for (auto it = nodes.begin(); it != nodes.end(); it++) {
         for (auto ait = (*it).begin(); ait != (*it).end(); ait++) {
-            if ((*ait).get_player() >= 0 &&
+            int p = (*ait).get_player();
+            if ( p >= 0 && p < players &&
                 std::find((*ait).tiles.begin(), (*ait).tiles.end(), tile) != (*ait).tiles.end()) {
                 set.insert((*ait).get_player());
             }

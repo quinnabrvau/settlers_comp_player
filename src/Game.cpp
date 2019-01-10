@@ -22,21 +22,31 @@ std::vector<int> all_rolls() {
     return rolls;
 }
 
-Game::Game(int _players, tRollType roll) : roll_type(roll) {
-    for (int i = 0; i<_players; i++) {
-        players.push_back(Player(i));
+Game::Game(int c_players, tRollType roll) : roll_type(roll) {
+    _players.clear(); players.clear();
+    for (int i = 0; i < c_players; i++) {
+        _players.push_back(Player(i));
     }
-    std::shuffle(players.begin(), players.end(), std::default_random_engine());
-    board = Board(_players);
+    std::random_shuffle(_players.begin(), _players.end());
+    for (int i = 0; i < c_players; i++) {
+        players.push_back(&_players[i]);
+    }
+    board = Board(c_players);
+}
+
+Game::Game(std::vector<Player*> __players, tRollType roll) :
+    roll_type(roll),
+    players( __players.begin(), __players.end() ) {
+    board = Board(__players.size());
 }
 
 void Game::start_phase(void) {
     int p ; //p for player
     for (p = 0; p < players.size(); p++) {
-        start_turn(&players[p], false);
+        start_turn(players[p], false);
     }
     for (p--; p >= 0; p--) {
-        start_turn(&players[p], true);
+        start_turn(players[p], true);
     }
 }
 
@@ -125,7 +135,7 @@ void Game::rob_players(void) {
 
 void Game::distribute_resources(int roll) {
     for (auto it = players.begin(); it != players.end(); it++) {
-        (*it).get_resources(roll);
+        (*it)->get_resources(roll);
     }
 }
 void Game::move_rober(Player *player){
@@ -141,10 +151,11 @@ void Game::move_rober(Player *player){
     
     // steal a card
     moves.clear();
-    std::vector<int> stealable_players =  board.get_players_on_tile((Tile*)move.second);
+    std::vector<int> stealable_players;
+    stealable_players =  board.get_players_on_tile((Tile*)move.second);
     for (auto it = stealable_players.begin(); it != stealable_players.end(); it++) {
         if (*it != player->get_player()) {
-            Player * t_player = &players[*it];
+            Player * t_player = players[*it];
             if (t_player->has_resources()) {
                 moves.push_back(Move(m_steal_card, t_player));
             }
@@ -165,7 +176,7 @@ int Game::roll_dice(void) {
     } else {
         if (stack.size()==0) { //create a new stack and shuffle the stack
             stack = all_rolls();
-            std::shuffle(stack.begin(), stack.end(), std::default_random_engine());
+            std::random_shuffle(stack.begin(), stack.end());
         }
         if (roll_type == ROLL_STACK_5) { //remove the top five cards
             for (int i=0;i<5;i++) stack.pop_back();
@@ -179,7 +190,7 @@ int Game::roll_dice(void) {
 
 int Game::is_winner() {
     for (int i = 0; i<players.size(); i++) {
-        if (players[i].points_pri() >= win_points) {
+        if (players[i]->points_pri() >= win_points) {
             return i;
         }
     }
@@ -194,7 +205,7 @@ int Game::play_game(void) {
     start_phase();
     while (winner == -1) {
         std::cout << "Player: " << p << "'s turn: " << turns << "\n";
-        main_turn(&players[p]);
+        main_turn(players[p]);
         winner = is_winner();
         p = (p+1)%players.size();
         turns++;
