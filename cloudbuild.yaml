@@ -1,8 +1,6 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '--tag=gcr.io/$PROJECT_ID/build-image', '.' ]
 - name: 'gcr.io/cloud-builders/git'
-  args: ['clone', 'https://github.com/quinnabrvau/settlers_comp_player.git']
+  args: ['clone', '--recurse-submodules','https://github.com/quinnabrvau/settlers_comp_player.git']
 - name: 'gcr.io/$PROJECT_ID/build-image'
   args: ['cmake','.']
   env: 
