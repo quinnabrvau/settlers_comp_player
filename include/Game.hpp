@@ -48,4 +48,6 @@ public:
     int play_game(void);
 };
 
+void test__play__Game(void);
+
 #endif /* Game_hpp */

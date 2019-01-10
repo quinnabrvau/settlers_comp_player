@@ -10,6 +10,9 @@ set( GAME_SOURCES
     ./common.cpp
     ${headers}
 )
+set( GENETIC_SOURCES
+    ./Genetic.cpp
+)
 
 include_directories(
     ../include
@@ -26,10 +29,19 @@ target_compile_definitions(GAME_TEST_LIB
     PRIVATE TESTING
 )
 
-add_executable(catan
-    ${GAME_SOURCES}
-    ./main.cpp
+add_library(GENETIC_TEST_LIB
+    ../unity/src/unity.c
+    ${GENETIC_SOURCES}
+)
+target_include_directories(GENETIC_TEST_LIB
+    PRIVATE ../unity/src
+)
+target_compile_definitions(GENETIC_TEST_LIB
+    PRIVATE TESTING
 )
 
-
-add_test (NAME Play_Test COMMAND catan -t)
+add_executable(catan
+    ${GAME_SOURCES}
+    ${GENETIC_SOURCES}
+    ./main.cpp
+)

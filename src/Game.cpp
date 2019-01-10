@@ -212,3 +212,48 @@ int Game::play_game(void) {
     }
     return winner;
 }
+
+// TEST CODE
+// GAME
+
+#ifdef TESTING
+#include "unity.h"
+
+void test__Game_0(void) {
+    Game game;
+    game.play_game();
+}
+void test__Game_1(void) {
+    Game game(3,ROLL_DICE);
+    game.play_game();
+}
+void test__Game_2(void) {
+    Game game(3,ROLL_STACK);
+    game.play_game();
+}
+void test__Game_3(void) {
+    Game game(3,ROLL_STACK_5);
+    game.play_game();
+}
+void test__Game_4(void) {
+    std::vector<Player> _players;
+    std::vector<Player*> players;
+    for (int i = 1; i<=4; i++) {
+        _players.push_back(Player(i));
+    }
+    for (int i = 0; i<4; i++) {
+        players.push_back(&_players[i]);
+    }
+    Game game4(players);
+    game4.play_game();
+}
+
+void test__play__Game(void) {
+    RUN_TEST(test__Game_0);
+    RUN_TEST(test__Game_1);
+    RUN_TEST(test__Game_2);
+    RUN_TEST(test__Game_3);
+    RUN_TEST(test__Game_4);
+}
+
+#endif//TESTING
