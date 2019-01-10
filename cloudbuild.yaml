@@ -5,8 +5,8 @@ steps:
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone', 'https://github.com/quinnabrvau/settlers_comp_player.git']
   timeout: 500s
-- name: 'gcr.io/$PROJECT_ID/build-image'
-  args: ['./all_test.sh']
+- name: 'ubuntu'
+  args: ['sh','./all_test.sh']
   timeout: 500s
 images:
 - 'gcr.io/$PROJECT_ID/build-image'
