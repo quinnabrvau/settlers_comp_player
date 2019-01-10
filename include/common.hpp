@@ -50,10 +50,15 @@ typedef enum {
     S_END,
 } tSettlement;
 
-typedef struct {
+class Tile {
+public:
     int type, roll;
-    bool rob;
-} Tile;
+    bool rob = false;
+    Tile(int _type, int _roll, bool _rob=false) :
+        type(_type), roll(_roll), rob(_rob) {}
+    Tile() :
+    type(-1), roll(-1), rob(false) {}
+};
 
 class b_edge{
 private:

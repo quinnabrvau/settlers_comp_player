@@ -48,16 +48,19 @@ void print_move(Move move);
 void print_moves(std::vector<Move> moves);
 
 class Player {
-    unsigned int resources[R_END];
+    std::vector<unsigned int> resources;
     std::vector<b_node*> nodes; //heads of the two colonies
     //TODO add developement cards
     int player;
 
     std::default_random_engine generator;
     std::uniform_int_distribution<int> uniform_dist;
+    int _steal(void);
 public:
-    Player(int p) : player(p) {
+    Player(int p) : resources(5), player(p) {
         uniform_dist = std::uniform_int_distribution<int>(0, 200000);
+        for (int i = 0; i < R_END; i++)
+            resources[i] = 0;
     };
     
     int get_player(void) {return player;}
@@ -77,6 +80,10 @@ public:
     void buy_settlement(b_node * node);
     void buy_city(b_node * node);
     void buy_road(b_edge * edge);
+
+    void buy_settlement(void * node) {buy_settlement((b_node*)node);}
+    void buy_city(void * node) {buy_city((b_node*)node);}
+    void buy_road(void * edge) {buy_road((b_edge*)edge);}
     
     //checks if the player gets resources on a roll
     void get_resources(int roll);
@@ -112,9 +119,14 @@ public:
     Move move(void);
     
     //TESTS
-    //Move_tests
-    void test_get_moves(void);
-    void test_move(void);
+    //Helper functions
+    void test__clear_res(void);
+    void test__add_road_res(void);
+    void test__add_settlement_res(void);
+    void test__add_city_res(void);
+    void test__add_dev_res(void);
+    std::vector<unsigned int> test__get_resources(void);
+    void test__steal(void);
 };
 
 void test__player(void);

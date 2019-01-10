@@ -227,8 +227,8 @@ void b_node_test__has_port(void) {
 }
 void b_node_test__get_resources(void) {
     b_node node;
-    Tile tiles[3];
-    for (int i = 0; i<3; i++) node.tiles.push_back(tiles+i);
+    std::vector<Tile> tiles(3);
+    for (int i = 0; i<3; i++) node.tiles.push_back(&tiles[i]);
     node.assign_settlement(0);
     node.test__get_resources(); // test with settlement
     node.upgrade_settlement();

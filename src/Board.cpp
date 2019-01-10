@@ -92,12 +92,9 @@ void Board::gen_sets(void) {
         std::vector<Tile> new_tiles;
         for (j=0;j<tile_shape[k];j++) {
             if (*tit != t_desert) {
-                Tile new_tile = {.type=*tit++, .roll=*rit++, .rob=false};
-                new_tiles.push_back(new_tile);
-                
+                new_tiles.push_back(Tile(*tit++, *rit++, false));
             } else {
-                Tile new_tile = {.type=*tit++, .roll = 0, .rob=true};
-                new_tiles.push_back(new_tile);
+                new_tiles.push_back(Tile(*tit++, *rit++, true));
             }
         }
         tiles.push_back(new_tiles);
