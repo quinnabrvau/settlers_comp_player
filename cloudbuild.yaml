@@ -1,7 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: [ 'build', '--tag=gcr.io/$PROJECT_ID/build-image', '.' ]
-  timeout: 2000s
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone', 'https://github.com/quinnabrvau/settlers_comp_player.git']
   timeout: 20s
