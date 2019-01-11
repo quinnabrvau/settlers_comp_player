@@ -56,54 +56,55 @@ public:
     }
     
     T& operator[](Position index) {return array[index.first][index.second];};
-    std::vector<T>& operator[](int row) { return array[row]; };
-    T& operator()(int col, int row) {return this[Position(col,row)];};
-    void operator=(Array* A) {
+    std::vector<T>& operator[](int col) { return array[col]; };
+    T& operator()(int col, int row) {return array[col][row];};
+    /*void operator=(Array* A) {
         this = A->copy();
-    }
-    
-    Shape output_shape(Array& A) {
+    }*/
+    template<class K>
+    Shape output_shape(Array<K>& A) {
         Shape s = this->shape();
         Shape sa = A.shape();
         return Shape(s.first, sa.second);
     }
-    bool can_multiply(Array& A) {
+    template<class K>
+    bool can_multiply(Array<K>& A) {
         Shape s = this->shape();
         Shape sa = A.shape();
         return s.second==sa.first;
     }
-    void static_multiply(Array& A, Array& B) {
-        Shape s = this->shape();
+private:
+    template<class K, class L>
+    void static_multiply(Array<T>& A, Array<K>& B, Array<L>& out) {
         Shape sa = A.shape();
         Shape sb = B.shape();
-        ASSERT(sb == output_shape(A)); // check output shape
-        ASSERT(s.second == sa.first); // check middle dimensions
+        Shape sout = out.shape();
+        ASSERT(sout == A.output_shape(B)); // check output shape
+        ASSERT(sa.second == sb.first); // check middle dimensions
         //TODO multiply
-        for (int i = 0; i < s.first; i++) {
-            for (int j = 0; j < sa.second; j++) {
-                T* t = &B.array[i][j];
-                *t = 0;
-                for (int k = 0; k<s.second; k++) {
-                    *t += this->array[i][k] * A.array[k][j];
+        for (int i = 0; i < sa.first; i++) {
+            for (int j = 0; j < sb.second; j++) {
+                L* l = &out[i][j];
+                *l = 0;
+                for (int k = 0; k<sa.second; k++) {
+                    *l += A(i,k)*B(k,j);
                 }
             }
         }
     }
-    
-    Array operator*(Array& A) {
+public:
+    template<class K>
+    Array operator*(Array<K>& A) {
         ASSERT(can_multiply(A));
         Array B(output_shape(A));
-        static_multiply(A, B);
+        static_multiply(*this,A,B);
         return B;
     }
     template<class K>
     Array operator*(K f) {
-        Array A = copy();
-        for (auto rit = A.array.begin(); rit != A.array.end(); rit++) {
-            for (auto cit = *rit.begin(); cit != *rit.end(); cit++) {
-                *cit *= f;
-            }
-        }
+        Array A = *this;
+        A *= f;
+        return A;
     }
     template<class K>
     void operator*=(K f) {
@@ -113,8 +114,8 @@ public:
             }
         }
     }
-
-    bool can_add(Array& A) {
+    template<class K>
+    bool can_add(Array<K>& A) {
         Shape s = this->shape();
         Shape sa = A->shape();
         if (s.first == sa.first) {
@@ -127,7 +128,8 @@ public:
         return sa.first == 1 && sa.second == 1;
     }
 private:
-    void static_add_row_vec(Array& A, Array& B) {
+    template<class K>
+    void static_add_row_vec(Array<K>& A, Array& B) {
         Shape s = this->shape();
         Shape sa = A->shape();
         Shape sb = B->shape();
@@ -139,7 +141,8 @@ private:
             }
         }
     }
-    void static_add_col_vec(Array& A, Array& B) {
+    template<class K>
+    void static_add_col_vec(Array<K>& A, Array& B) {
         Shape s = this->shape();
         Shape sa = A->shape();
         Shape sb = B->shape();
@@ -151,8 +154,8 @@ private:
             }
         }
     }
-    
-    void static_add_array(Array& A, Array& B) {
+    template<class K>
+    void static_add_array(Array<K>& A, Array& B) {
         Shape s = this->shape();
         Shape sa = A->shape();
         Shape sb = B->shape();
@@ -164,7 +167,8 @@ private:
         }
     }
 public:
-    void static_add(Array& A, Array& B) {
+    template<class K>
+    void static_add(Array<K>& A, Array& B) {
         Shape s = this->shape();
         Shape sa = A->shape();
         Shape sb = B->shape();
@@ -180,13 +184,15 @@ public:
             ASSERT(false);
         }
     }
-    Array operator+(Array& A) {
+    template<class K>
+    Array operator+(Array<K>& A) {
         ASSERT(can_add(A));
         Array B(shape());
         static_add(A, &B);
         return B;
     }
-    void operator+=(Array& A) {
+    template<class K>
+    void operator+=(Array<K>& A) {
         static_add(A, this);
     }
     template<class K>
@@ -222,12 +228,41 @@ public:
     void operator-=(K f) {
         this += (-f);
     }
+    
+    
+// Boolean Checks
+    template<class K>
+    bool operator==(Array<K>& A) {
+        Shape s = shape(); Shape sa = A.shape();
+        if (s.first != sa.first || s.second != sa.second) return false;
+        for (int i = 0; i < s.first; i++) {
+            for (int j = 0; j < s.second; j++) {
+                if (array[i][j] != A(i,j)) return false;
+            }
+        }
+        return true;
+    }
+    template<class K>
+    bool operator==(K k) {
+        Shape s = shape();
+        for (int i = 0; i < s.first; i++) {
+            for (int j = 0; j < s.second; j++) {
+                if (array[i][j] != k) return false;
+            }
+        }
+        return true;
+    }
 };
+
 
 template <class T>
 Array<T> Array_Zeros(Shape shape) {
     Array<T> A(shape);
     return A;
+}
+template <class T>
+Array<T> Array_Zeros(int cols=1, int rows=1) {
+    return Array_Zeros<T>(Shape(cols,rows));
 }
 
 template <class T>
@@ -239,6 +274,10 @@ Array<T> Array_Ones(Shape shape) {
         }
     }
     return A;
+}
+template <class T>
+Array<T> Array_Ones(int cols=1, int rows=1) {
+    return Array_Ones<T>(Shape(cols,rows));
 }
 
 void test__Array(void);

@@ -21,16 +21,17 @@ add_executable (_Play_Test
     play_test.cpp
     ${UNITY_SOURCES}
 )
-target_link_libraries(_Unit_Test
+target_link_libraries(_Game_Test
     GAME_TEST_LIB
+)
+target_link_libraries(_Genetic_Test
+    GENETIC_TEST_LIB
 )
 target_link_libraries(_Play_Test
     GAME_TEST_LIB
-)
-target_link_libraries(_Play_Test
     GENETIC_TEST_LIB
 )
 
-add_test (NAME Unit_Test COMMAND _Unit_Test)
-add_test (NAME Play_Test COMMAND _Play_Test)
+add_test (NAME Game_Test COMMAND _Game_Test)
 add_test (NAME Genetic_Test COMMAND _Genetic_Test)
+add_test (NAME Play_Test COMMAND _Play_Test)
