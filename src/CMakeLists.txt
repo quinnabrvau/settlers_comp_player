@@ -16,9 +16,12 @@ set( GAME_SOURCES
 )
 set( GENETIC_SOURCES
     ./Genetic.cpp
+    ./G_Player.cpp
     ../include/Genetic.hpp
     ../include/Array.hpp
     ../include/common.hpp
+    ../include/G_Player.hpp
+
 )
 
 include_directories(
