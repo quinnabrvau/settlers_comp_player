@@ -15,6 +15,7 @@ set( GAME_SOURCES
     ../include/common.hpp
 )
 set( GENETIC_SOURCES
+    ./Array.cpp
     ./Genetic.cpp
     ./G_Player.cpp
     ../include/Genetic.hpp
