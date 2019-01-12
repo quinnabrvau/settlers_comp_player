@@ -198,6 +198,16 @@ public:
         }
         return true;
     }
+
+    template<class K>
+    bool operator!=(Array<K>& A) {
+        return !(*this == A);
+    }
+
+    template<class K>
+    bool operator!=(K k) {
+        return !(*this == k);
+    }
 };
 
 
