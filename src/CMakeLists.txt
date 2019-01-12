@@ -17,11 +17,11 @@ set( GAME_SOURCES
 set( GENETIC_SOURCES
     ./Array.cpp
     ./Genetic.cpp
-    ./G_Player.cpp
+    ./A_Player.cpp
     ../include/Genetic.hpp
     ../include/Array.hpp
     ../include/common.hpp
-    ../include/G_Player.hpp
+    ../include/A_Player.hpp
 
 )
 

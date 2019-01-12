@@ -114,6 +114,12 @@ public:
     
     // take a turn
     // given a set of moves (think start the game)
+    
+    //For higher level classes define:
+//    Move move(State state);
+//    Move move(State state, std::vector<Move> moves);
+    
+    //For basic testing of game mechanics
     Move move(std::vector<Move> moves);
     // a normal turn
     Move move(void);

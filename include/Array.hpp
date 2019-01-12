@@ -26,13 +26,7 @@ class Array {
         }
     };
 public:
-    Array(const Array& A) {
-        Shape s = A.shape();
-        array = std::vector<std::vector<T>>(s.first);
-        for (int i = 0; i<s.first; i++) {
-            array[i] = std::vector<T>(A.array[i].cbegin(), A.array[i].cend());
-        }
-    }
+    Array (std::vector<std::vector<T>>* p_array) : array(p_array-begin(),p_array->end) {}
     Array(Shape s) {
         init_array(s.first, s.second);
     }
