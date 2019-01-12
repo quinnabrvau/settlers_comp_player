@@ -116,79 +116,25 @@ public:
     }
     template<class K>
     bool can_add(Array<K>& A) {
-        Shape s = this->shape();
-        Shape sa = A->shape();
-        if (s.first == sa.first) {
-            return sa.second == 1 || s.second == 1 || sa.second == s.second;
-        }
-        if (s.second == sa.second) {
-            return sa.first == 1 || s.first == 1;
-        }
-        if (s.first == 1 || s.second == 1) return true;
-        return sa.first == 1 && sa.second == 1;
+        return shape() == A.shape();
     }
-private:
-    template<class K>
-    void static_add_row_vec(Array<K>& A, Array& B) {
-        Shape s = this->shape();
-        Shape sa = A->shape();
-        Shape sb = B->shape();
-        ASSERT(sb == s);
-        ASSERT(s.second == sa.second && sa.first == 1);
-        for (int c = 0; c < s.first; c++ ) {
-            for (int r = 0; r < s.second; r++) {
-                B->array[c][r] = array[c][r] + A->array[0][r];
-            }
-        }
-    }
-    template<class K>
-    void static_add_col_vec(Array<K>& A, Array& B) {
-        Shape s = this->shape();
-        Shape sa = A->shape();
-        Shape sb = B->shape();
-        ASSERT(sb == s);
-        ASSERT(s.first == sa.first && sa.second == 1);
-        for (int c = 0; c < s.first; c++ ) {
-            for (int r = 0; r < s.second; r++) {
-                B->array[c][r] = array[c][r] + A->array[c][0];
-            }
-        }
-    }
-    template<class K>
-    void static_add_array(Array<K>& A, Array& B) {
-        Shape s = this->shape();
-        Shape sa = A->shape();
-        Shape sb = B->shape();
-        ASSERT(sb == s && sb == sa);
-        for (int c = 0; c < s.first; c++ ) {
-            for (int r = 0; r < s.second; r++) {
-                B->array[c][r] = array[c][r] + A->array[c][r];
-            }
-        }
-    }
-public:
     template<class K>
     void static_add(Array<K>& A, Array& B) {
         Shape s = this->shape();
-        Shape sa = A->shape();
-        Shape sb = B->shape();
-        ASSERT(can_add(A));
+        Shape sb = B.shape();
+        ASSERT(can_add(A))
         ASSERT(sb == s);
-        if (sa == s) {
-            static_add_array(A, B);
-        } else if (sa.first == 1) {
-            static_add_row_vec(A, B);
-        } else if (sa.second == 1) {
-            static_add_col_vec(A, B);
-        } else {
-            ASSERT(false);
+        for (int c = 0; c < s.first; c++ ) {
+            for (int r = 0; r < s.second; r++) {
+                B(c,r) = array[c][r] + A(c,r);
+            }
         }
     }
     template<class K>
     Array operator+(Array<K>& A) {
         ASSERT(can_add(A));
         Array B(shape());
-        static_add(A, &B);
+        static_add(A, B);
         return B;
     }
     template<class K>
