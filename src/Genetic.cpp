@@ -11,7 +11,7 @@
 
 template<class T>
 void Genetic_Array<T>::mutate(float mutation_rate) {
-    ASSERT(mutation_rate > 0 && mutation_rate < 2.0)
+    ASSERT(mutation_rate > 0);
     Shape s = this->shape();
     int size = s.first*s.second;
     std::default_random_engine generator;

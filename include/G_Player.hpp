@@ -19,7 +19,7 @@ class G_Player:Player {
     Genetic_Array<float> calculate(Genetic_Array<float> state) {
         Genetic_Array<float> out = state;
         for (auto it = g_array.begin(); it != g_array.end(); it++) {
-            out = out * (*it);
+//            out = out * (*it);
         }
         return out;
     }
