@@ -13,5 +13,6 @@
 int main(int argc, const char * argv[]) {
     UNITY_BEGIN();
     test__Array();
+    test__Genetic();
     return UNITY_END();
 }

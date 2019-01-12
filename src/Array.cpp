@@ -73,6 +73,13 @@ void test__multiply_tk(void) {
                 
                 B = Array_Ones<K>(k,j);
                 TEST_ASSERT_FALSE(A.can_multiply(B));
+                A = Array_Ones<T>(Shape(i,j));
+                C = A*2;
+                TEST_ASSERT(C==2);
+                TEST_ASSERT(B==1);
+                
+                C*=2;
+                TEST_ASSERT(C==4);
             }
         }
     }
@@ -104,70 +111,22 @@ void test__add_tk(void) {
             
             B = Array_Zeros<K>(j,i);
             TEST_ASSERT_FALSE(A.can_add(B));
+            
+            C = A+1;
+            TEST_ASSERT(A==0);
+            TEST_ASSERT(C==1);
+            
+            C+=1;
+            TEST_ASSERT(C==2);
+            
+            C-=1;
+            TEST_ASSERT(C==1);
+            
+            C = C-1;
+            TEST_ASSERT(C==0);
         }
     }
 }
-
-#define _NUM_T_RUN_TEST(func)           \
-    do {                                \
-    RUN_TEST( func <int> );             \
-    RUN_TEST( func <short> );           \
-    RUN_TEST( func <long> );            \
-    RUN_TEST( func <unsigned int> );    \
-    RUN_TEST( func <unsigned short> );  \
-    RUN_TEST( func <unsigned long> );   \
-    RUN_TEST( func <char> );            \
-    RUN_TEST( func <float> );           \
-    RUN_TEST( func <double> );          \
-    RUN_TEST( func <long double> );     \
-    } while(false)
-
-typedef void (*void_func) (void);
-
-typedef unsigned int unint;
-typedef unsigned short unshort;
-typedef unsigned long unlong;
-typedef long long longlong;
-typedef long double longdouble;
-
-#define ___RUN_TEST(func,type1,type2)       \
-    do {                                    \
-    void_func func ## _ ## type1 ## _ ## type2      \
-     = func < type1, type2 >;                       \
-    RUN_TEST( (func ## _ ## type1 ## _ ## type2) ); \
-    } while(false)
-
-#define RUN_TEST_S(func, type1)                \
-    do {                                       \
-    ___RUN_TEST( func,type1,int );             \
-    ___RUN_TEST( func,type1,short );           \
-    ___RUN_TEST( func,type1,long );            \
-    ___RUN_TEST( func,type1,longlong );        \
-    ___RUN_TEST( func,type1,unint );           \
-    ___RUN_TEST( func,type1,unshort );         \
-    ___RUN_TEST( func,type1,unlong );          \
-    ___RUN_TEST( func,type1,char );            \
-    ___RUN_TEST( func,type1,float );           \
-    ___RUN_TEST( func,type1,double );          \
-    ___RUN_TEST( func,type1,longdouble );      \
-    } while(false)
-
-#define _NUM_T_K_RUN_TEST(func)          \
-    do {                                 \
-    RUN_TEST_S( func, int );             \
-    RUN_TEST_S( func, short );           \
-    RUN_TEST_S( func, long );            \
-    RUN_TEST_S( func, longlong );        \
-    RUN_TEST_S( func, unint );           \
-    RUN_TEST_S( func, unshort );         \
-    RUN_TEST_S( func, unlong );          \
-    RUN_TEST_S( func, char );            \
-    RUN_TEST_S( func, float );           \
-    RUN_TEST_S( func, double );          \
-    RUN_TEST_S( func, longdouble );      \
-    } while(false)
-
-
 
 void test__Array(void) {
     _NUM_T_RUN_TEST(test__gen_array);

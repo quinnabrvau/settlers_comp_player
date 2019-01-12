@@ -9,6 +9,7 @@
 #define Array_h
 
 #include <vector>
+#include <iterator>
 #include <utility>
 #include "common.hpp"
 
@@ -44,6 +45,7 @@ public:
         for (int i = 0; i<s.first; i++) {
             A.array[i] = std::vector<T>(array[i].begin(), array[i].end());
         }
+        return A;
     }
     
     int size(void) const {return array.size();}
@@ -109,7 +111,7 @@ public:
     template<class K>
     void operator*=(K f) {
         for (auto rit = array.begin(); rit != array.end(); rit++) {
-            for (auto cit = *rit.begin(); cit != *rit.end(); cit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
                 *cit *= f;
             }
         }
@@ -143,36 +145,39 @@ public:
     }
     template<class K>
     Array operator+(K f) {
-        Array A = copy();
+        Array A = *this;
         for (auto rit = A.array.begin(); rit != A.array.end(); rit++) {
-            for (auto cit = *rit.begin(); cit != *rit.end(); cit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
                 *cit += f;
             }
         }
+        return A;
     }
     template<class K>
     void operator+=(K f) {
         for (auto rit = array.begin(); rit != array.end(); rit++) {
-            for (auto cit = *rit.begin(); cit != *rit.end(); cit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
                 *cit += f;
             }
         }
     }
     
-    void operator-(void) {
-        for (auto rit = array.begin(); rit != array.end(); rit++) {
-            for (auto cit = *rit.begin(); cit != *rit.end(); cit++) {
-                *cit = -*cit;
+    Array operator-(void) {
+        Array A = *this;
+        for (auto rit = A.array.begin(); rit != A.array.end(); rit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
+                *cit = -(*cit);
             }
         }
+        return A;
     }
     template<class K>
     Array operator-(K f) {
-        return this+(-f);
+        return *this+(-f);
     }
     template<class K>
     void operator-=(K f) {
-        this += (-f);
+        *this += (-f);
     }
     
     
@@ -190,10 +195,9 @@ public:
     }
     template<class K>
     bool operator==(K k) {
-        Shape s = shape();
-        for (int i = 0; i < s.first; i++) {
-            for (int j = 0; j < s.second; j++) {
-                if (array[i][j] != k) return false;
+        for (auto rit = array.begin(); rit != array.end(); rit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
+                if (*cit != k) return false;
             }
         }
         return true;
@@ -207,6 +211,68 @@ public:
     template<class K>
     bool operator!=(K k) {
         return !(*this == k);
+    }
+    
+    template<class K>
+    bool operator<(K k) {
+        for (auto rit = array.begin(); rit != array.end(); rit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
+                if (*cit >= k) return false;
+            }
+        }
+        return true;
+    }
+    
+    template<class K>
+    bool operator<=(K k) {
+        for (auto rit = array.begin(); rit != array.end(); rit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
+                if (*cit > k) return false;
+            }
+        }
+        return true;
+    }
+    
+    template<class K>
+    bool operator>(K k) {
+        for (auto rit = array.begin(); rit != array.end(); rit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
+                if (*cit <= k) return false;
+            }
+        }
+        return true;
+    }
+    
+    template<class K>
+    bool operator>=(K k) {
+        for (auto rit = array.begin(); rit != array.end(); rit++) {
+            for (auto cit = (*rit).begin(); cit != (*rit).end(); cit++) {
+                if (*cit < k) return false;
+            }
+        }
+        return true;
+    }
+    typedef typename std::vector<std::vector<T>>::iterator iterator;
+    typedef typename std::vector<std::vector<T>>::const_iterator const_iterator;
+    
+// Iterator Creator
+    iterator begin(void) {
+        return array.begin();
+    }
+    iterator end(void) {
+        return array.end();
+    }
+    const_iterator begin(void) const {
+        return array.begin();
+    }
+    const_iterator end(void) const {
+        return array.end();
+    }
+    const_iterator cbegin(void) const {
+        return array.cbegin();
+    }
+    const_iterator cend(void) const {
+        return array.cend();
     }
 };
 
@@ -237,5 +303,68 @@ Array<T> Array_Ones(int cols=1, int rows=1) {
 }
 
 void test__Array(void);
+
+#ifdef TESTING
+#define _NUM_T_RUN_TEST(func)           \
+do {                                \
+RUN_TEST( func <int> );             \
+RUN_TEST( func <short> );           \
+RUN_TEST( func <long> );            \
+RUN_TEST( func <unsigned int> );    \
+RUN_TEST( func <unsigned short> );  \
+RUN_TEST( func <unsigned long> );   \
+RUN_TEST( func <char> );            \
+RUN_TEST( func <float> );           \
+RUN_TEST( func <double> );          \
+RUN_TEST( func <long double> );     \
+} while(false)
+
+typedef void (*void_func) (void);
+
+typedef unsigned int unint;
+typedef unsigned short unshort;
+typedef unsigned long unlong;
+typedef long long longlong;
+typedef long double longdouble;
+
+#define ___RUN_TEST(func,type1,type2)       \
+do {                                    \
+void_func func ## _ ## type1 ## _ ## type2      \
+= func < type1, type2 >;                       \
+RUN_TEST( (func ## _ ## type1 ## _ ## type2) ); \
+} while(false)
+
+#define RUN_TEST_S(func, type1)                \
+do {                                       \
+___RUN_TEST( func,type1,int );             \
+___RUN_TEST( func,type1,short );           \
+___RUN_TEST( func,type1,long );            \
+___RUN_TEST( func,type1,longlong );        \
+___RUN_TEST( func,type1,unint );           \
+___RUN_TEST( func,type1,unshort );         \
+___RUN_TEST( func,type1,unlong );          \
+___RUN_TEST( func,type1,char );            \
+___RUN_TEST( func,type1,float );           \
+___RUN_TEST( func,type1,double );          \
+___RUN_TEST( func,type1,longdouble );      \
+} while(false)
+
+#define _NUM_T_K_RUN_TEST(func)          \
+do {                                 \
+RUN_TEST_S( func, int );             \
+RUN_TEST_S( func, short );           \
+RUN_TEST_S( func, long );            \
+RUN_TEST_S( func, longlong );        \
+RUN_TEST_S( func, unint );           \
+RUN_TEST_S( func, unshort );         \
+RUN_TEST_S( func, unlong );          \
+RUN_TEST_S( func, char );            \
+RUN_TEST_S( func, float );           \
+RUN_TEST_S( func, double );          \
+RUN_TEST_S( func, longdouble );      \
+} while(false)
+
+#endif//TESTING
+
 
 #endif /* Array_h */
