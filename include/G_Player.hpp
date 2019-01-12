@@ -31,8 +31,7 @@ public:
         g_array(dims.size()-1)
     {
         for (int i = 0; i < dims.size()-1; i++) {
-            Genetic_Array<float> n_g_array(dims[i], dims[i+1]);
-            g_array[i] = n_g_array;
+            g_array[i] = Genetic_Array<float>(dims[i], dims[i+1]);
         }
     }
     
