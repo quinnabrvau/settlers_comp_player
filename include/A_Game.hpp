@@ -10,5 +10,16 @@
 
 #include "Game.hpp"
 #include "A_Player.hpp"
+#include <vector>
+
+class A_Game:public Game {
+    std::vector<A_Player> _players;
+    std::vector<A_Player*> players;
+public:
+    A_Game(std::vector<A_Player*> __players, tRollType roll = ROLL_DICE);
+    
+    
+    
+};
 
 #endif /* A_Game_hpp */

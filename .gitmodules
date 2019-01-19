@@ -1,3 +1,9 @@
 [submodule "unity"]
 	path = unity
 	url = git@github.com:ThrowTheSwitch/Unity.git
+[submodule "genetic"]
+	path = genetic
+	url = git@github.com:quinnabrvau/cpp_genetic.git
+[submodule "matrix"]
+	path = matrix
+	url = git@github.com:quinnabrvau/cpp_matrix.git

@@ -17,12 +17,15 @@ set( GAME_SOURCES
 set( GENETIC_SOURCES
     ./Array.cpp
     ./Genetic.cpp
-    ./A_Player.cpp
     ../include/Genetic.hpp
     ../include/Array.hpp
     ../include/common.hpp
+)
+set( ADV_GAME_SOURCES
+    ./A_Game.cpp
+    ./A_Player.cpp
+    ../include/A_Game.hpp
     ../include/A_Player.hpp
-
 )
 
 include_directories(
@@ -51,8 +54,20 @@ target_compile_definitions(GENETIC_TEST_LIB
     PRIVATE TESTING
 )
 
+add_library(ADV_GAME_TEST_LIB
+../unity/src/unity.c
+${ADV_GAME_SOURCES}
+)
+target_include_directories(ADV_GAME_TEST_LIB
+PRIVATE ../unity/src
+)
+target_compile_definitions(ADV_GAME_TEST_LIB
+PRIVATE TESTING
+)
+
 add_executable(catan
     ${GAME_SOURCES}
     ${GENETIC_SOURCES}
+    ${ADV_GAME_SOURCES}
     ./main.cpp
 )

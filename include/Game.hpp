@@ -31,6 +31,8 @@ public:
     Game(int c_players = 4, tRollType roll = ROLL_DICE);
     Game(std::vector<Player*> __players, tRollType roll = ROLL_DICE);
     
+    
+    //todo change all point to players into int p
     void start_phase(void);
     void start_turn(Player * player, bool get_resource=false);
     
