@@ -7,12 +7,14 @@
 
 #include "A_Player.hpp"
 
-A_Player::A_Player(std::vector<Array<float>> _array, int p) :
+using namespace matrix;
+
+A_Player::A_Player(std::vector<pl_matrix> _array, int p) :
     Player(p), array(_array.begin(), _array.end()) { }
 
 
-Array<float> A_Player::calculate(State state) {
-    Array<float> out = state;
+pl_matrix A_Player::calculate(State state) {
+    pl_matrix out = state;
     auto it = array.begin();
     out = state * (*it);
     for (it++; it != array.end(); it++) {
@@ -34,7 +36,7 @@ Move A_Player::move(State state, std::vector<Move> moves) {
     if (moves.size() == 1) {
         return moves[0];
     }
-    Array<float> weights = calculate(state);
+    pl_matrix weights = calculate(state);
     
     // sort list of all possible moves by weights
     

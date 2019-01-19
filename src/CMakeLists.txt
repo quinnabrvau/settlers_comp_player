@@ -14,13 +14,6 @@ set( GAME_SOURCES
     ../include/b_common.hpp
     ../include/common.hpp
 )
-set( GENETIC_SOURCES
-    ./Array.cpp
-    ./Genetic.cpp
-    ../include/Genetic.hpp
-    ../include/Array.hpp
-    ../include/common.hpp
-)
 set( ADV_GAME_SOURCES
     ./A_Game.cpp
     ./A_Player.cpp
@@ -30,6 +23,8 @@ set( ADV_GAME_SOURCES
 
 include_directories(
     ../include
+    ../matrix/include
+    ../genetic/include
 )
 
 add_library(GAME_TEST_LIB
@@ -43,16 +38,6 @@ target_compile_definitions(GAME_TEST_LIB
     PRIVATE TESTING
 )
 
-add_library(GENETIC_TEST_LIB
-    ../unity/src/unity.c
-    ${GENETIC_SOURCES}
-)
-target_include_directories(GENETIC_TEST_LIB
-    PRIVATE ../unity/src
-)
-target_compile_definitions(GENETIC_TEST_LIB
-    PRIVATE TESTING
-)
 
 add_library(ADV_GAME_TEST_LIB
 ../unity/src/unity.c

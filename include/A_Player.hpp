@@ -8,20 +8,21 @@
 #ifndef A_Player_hpp
 #define A_Player_hpp
 
-#include "Array.hpp"
+#include "Matrix.hpp"
 #include "Player.hpp"
 #include <vector>
 
-typedef Array<float> State;
+typedef matrix::Matrix<float> State;
+typedef matrix::Matrix<float> pl_matrix;
 
 class A_Player:public Player {
     std::vector<int> dims;
-    std::vector<Array<float>> array;
+    std::vector<pl_matrix> array;
     
-    Array<float> calculate(State state);
+    pl_matrix calculate(State state);
     
 public:
-    A_Player(std::vector<Array<float>> _array, int p = 0);
+    A_Player(std::vector<pl_matrix> _array, int p = 0);
     
     // take a turn
     // given a set of moves (think start the game)
