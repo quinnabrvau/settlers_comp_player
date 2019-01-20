@@ -53,17 +53,17 @@ class Player {
     //TODO add developement cards
     int player;
 
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> uniform_dist;
     int _steal(void);
 public:
     Player(int p) : resources(5), player(p) {
-        uniform_dist = std::uniform_int_distribution<int>(0, 200000);
         for (int i = 0; i < R_END; i++)
             resources[i] = 0;
     };
     
+
+    void set_player(int p) {player = p;}
     int get_player(void) {return player;}
+
     // gets the points the oponents can see
     int points_pub();
     // gets the points the player can see

@@ -27,12 +27,12 @@ class Game {
     std::vector<int> stack; // used for drawing from a stack of cards
     int max_actions = 100;
     int win_points = 10;
+    int turns = 0;
 public:
-    Game(int c_players = 4, tRollType roll = ROLL_DICE);
+    Game(tRollType roll = ROLL_DICE) {roll_type = roll;}
+    Game(int c_players, tRollType roll = ROLL_DICE);
     Game(std::vector<Player*> __players, tRollType roll = ROLL_DICE);
     
-    
-    //todo change all point to players into int p
     void start_phase(void);
     void start_turn(Player * player, bool get_resource=false);
     
@@ -48,6 +48,8 @@ public:
     void distribute_resources(int roll);
     
     int play_game(void);
+    
+    std::vector<float> eval_game(void);
 };
 
 void test__play__Game(void);

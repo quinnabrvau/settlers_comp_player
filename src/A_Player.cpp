@@ -11,7 +11,14 @@ using namespace matrix;
 
 A_Player::A_Player(std::vector<pl_matrix> _array, int p) :
     Player(p), array(_array.begin(), _array.end()) { }
-
+    
+A_Player::A_Player (iterator be, iterator end, int p) : Player(p) {
+        array.clear();
+        while (be != end) {
+            array.push_back( pl_matrix( be.begin(), be.end() ) );
+            be*=1;
+        }
+    }
 
 pl_matrix A_Player::calculate(State state) {
     pl_matrix out = state;

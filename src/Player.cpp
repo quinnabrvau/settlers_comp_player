@@ -161,7 +161,10 @@ int Player::_steal(void) {
         }
     }
     if (all_res.size()==0) return -1;
-    return all_res[ uniform_dist( generator ) % all_res.size()];
+    std::random_device rd;
+    std::uniform_int_distribution<int> uniform_dist(0, all_res.size()-1 );
+
+    return all_res[ uniform_dist( rd ) ];
 }
 
 int Player::steal(void) {
@@ -194,7 +197,10 @@ Move Player::move(std::vector<Move> moves) {
     if (moves.size() == 0) {
         return Move(m_no_moves,NULL);
     }
-    int m =  uniform_dist( generator ) % moves.size();
+    std::random_device rd;
+    std::uniform_int_distribution<int> uniform_dist(0,  moves.size()-1 );
+
+    int m =  uniform_dist( rd );
     return moves[m];
 }
 Move Player::move(void) {

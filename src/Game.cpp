@@ -200,7 +200,7 @@ int Game::is_winner() {
 int Game::play_game(void) {
     int winner = -1;
     int p = 0; //p for player
-    int turns = 0;
+    turns = 0;
     std::cout << "Starting the game: " << players.size() << " players\n";
     start_phase();
     while (winner == -1) {
@@ -213,6 +213,19 @@ int Game::play_game(void) {
     return winner;
 }
 
+std::vector<float> Game::eval_game(void) {
+    std::vector<float> out(players.size());
+    
+    auto pit = players.begin();
+    auto oit = out.begin();
+    
+    while (oit != out.end() &&
+           pit != players.end()) {
+        *oit++ = (*pit++)->points_pri() - turns*0.01f;
+    }
+    return out;
+}
+
 // TEST CODE
 // GAME
 
@@ -220,7 +233,7 @@ int Game::play_game(void) {
 #include "unity.h"
 
 void test__Game_0(void) {
-    Game game;
+    Game game(4);
     game.play_game();
 }
 void test__Game_1(void) {

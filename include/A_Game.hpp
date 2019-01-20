@@ -16,10 +16,12 @@ class A_Game:public Game {
     std::vector<A_Player> _players;
     std::vector<A_Player*> players;
 public:
-    A_Game(std::vector<A_Player*> __players, tRollType roll = ROLL_DICE);
-    
+    A_Game(std::vector<A_Player*> __players, tRollType roll = ROLL_DICE) : Game(roll), players(__players.begin(), __players.end()) { }
     
     
 };
+
+std::vector<float> A_Game_Wrapper(
+    std::vector<A_Player*> players, void* context  );
 
 #endif /* A_Game_hpp */
